@@ -42,4 +42,18 @@ public class MainController {
         clientRepository.save(client);
         return "main";
     }
+
+    @PostMapping("/filter")
+    public String filter(@RequestParam String filter, Map<String, Object> model) {
+
+        if (filter.isEmpty()) {
+            Iterable<Client> clientList = clientRepository.findAll();
+            model.put("clients", clientList);
+        } else {
+            List<Client> clientList = clientRepository.findByName(filter);
+            model.put("clients", clientList);
+        }
+
+        return "main";
+    }
 }
