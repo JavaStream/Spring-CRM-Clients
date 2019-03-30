@@ -11,7 +11,7 @@
 	<groupId>com.javastream</groupId>
 	<artifactId>crm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>online_chat</name>
+	<name>crm</name>
 	<description>CRM project</description>
 
 	<properties>

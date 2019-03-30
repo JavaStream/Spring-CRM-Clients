@@ -18,15 +18,9 @@ public class MainController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/")
-    public String output() {
-        return "test";
-    }
-
-    @GetMapping("/print")
-    public String print(@RequestParam(name="name", required = false, defaultValue = "Test") String name, Map<String, Object> model) {
-        model.put("name", name);
-        return "test2";
+    @GetMapping("/")
+    public String index(Map<String, Object> model) {
+        return "index";
     }
 
     @GetMapping("/main")
@@ -36,8 +30,8 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping
-    public String add(@RequestParam String name, @RequestParam String description, Map<String, Object> model) {
+    @PostMapping("/main")
+    public String add(@RequestParam String name, @RequestParam String description) {
         Client client = new Client(name, description);
         clientRepository.save(client);
         return "main";
