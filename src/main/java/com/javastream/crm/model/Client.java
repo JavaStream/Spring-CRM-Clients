@@ -1,9 +1,6 @@
 package com.javastream.crm.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Client {
@@ -16,14 +13,21 @@ public class Client {
 
     private String description;
 
+    @ManyToOne(fetch = FetchType.EAGER)   // У одного менеджера может быть много клиентов
+    @JoinColumn(name = "user_id")         // Поле в базе данных будет называться user_id, а не manager_id
     private User manager;
 
     public Client() {
     }
 
-    public Client(String name, String description) {
+    public Client(String name, String description, User user) {
+        this.manager = user;
         this.name = name;
         this.description = description;
+    }
+
+    public String getManagerName() {
+        return manager != null ? manager.getUsername() : "<no manager>";
     }
 
     public Integer getId() {

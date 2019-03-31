@@ -34,7 +34,7 @@ public class MainController {
 
     @PostMapping("/main")
     public String add(@AuthenticationPrincipal User user, @RequestParam String name, @RequestParam String description) {
-        Client client = new Client(name, description);
+        Client client = new Client(name, description, user);
         clientRepository.save(client);
         return "main";
     }
