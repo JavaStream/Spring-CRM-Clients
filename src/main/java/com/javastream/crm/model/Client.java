@@ -16,6 +16,8 @@ public class Client {
 
     private String description;
 
+    private User manager;
+
     public Client() {
     }
 
@@ -46,5 +48,13 @@ public class Client {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }

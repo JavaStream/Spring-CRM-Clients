@@ -1,5 +1,6 @@
 package com.javastream.crm.config;
 
+import com.javastream.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,22 +9,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
-import javax.sql.DataSource;
-
 // При старте приложения конфигурирует Security
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private DataSource dataSource;
+    private UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()                                   // Включаем авторизацию для обьекта
-                    .antMatchers("/", "/registration").permitAll()          // Разрешаем доступ без пароля для главной страницы
-                    .anyRequest().authenticated()                      // Для всех остальных запросов требуется авторизация
+                .authorizeRequests()                                                    // Включаем авторизацию для обьекта
+                    .antMatchers("/", "/registration").permitAll()          // Разрешаем доступ без пароля для главной страницы и для Регистрации
+                    .anyRequest().authenticated()                                       // Для всех остальных запросов требуется авторизация
                 .and()
                     .formLogin()                                       // Включаем форму для ввода kогина
                     .loginPage("/login")                               // url для ввода kогина
@@ -34,15 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    // Менеджер, который обслуживает учетные записи пользователей
-
+    // Менеджер, который обслуживает учетные записи пользователей. Проводим аутентификацию через базу данных
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())                 // шифрует пароли, чтобы они не хранились в явном виде
-                .usersByUsernameQuery("select username, password, active from usr where username=?")
-                .authoritiesByUsernameQuery("select u.username, ur.roles from usr u inner join user_role ur on u.id=ur.user_id where u.username=?");
+        auth.userDetailsService(userService)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());             // шифрует пароли, чтобы они не хранились в явном виде
 
     }
 }

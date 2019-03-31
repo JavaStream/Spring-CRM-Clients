@@ -1,8 +1,10 @@
 package com.javastream.crm.controller;
 
 import com.javastream.crm.model.Client;
+import com.javastream.crm.model.User;
 import com.javastream.crm.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +33,7 @@ public class MainController {
     }
 
     @PostMapping("/main")
-    public String add(@RequestParam String name, @RequestParam String description) {
+    public String add(@AuthenticationPrincipal User user, @RequestParam String name, @RequestParam String description) {
         Client client = new Client(name, description);
         clientRepository.save(client);
         return "main";
