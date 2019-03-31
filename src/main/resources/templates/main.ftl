@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Main</title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
+<#import "parts/login.ftl" as l>
+
+<@c.page>
     <div>
-        <form action="/logout" method="post">
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
-            <input type="submit" value="Sign Out"/>
-        </form>
+        <@l.logout />
     </div>
     <div>
         <form method="post">
             <input type="text" name="name" placeholder="Введите название клиента">
             <input type="text" name="description" placeholder="Краткое описание">
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <button type="submit">Добавить</button>
         </form>
     </div>
@@ -23,20 +17,19 @@
     <div>
         <form method="post" action="filter">
             <input type="text" name="filter">
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <button type="submit">Найти</button>
         </form>
     </div>
 
 
     <div>Список клиентов </div>
-    {{#clients}}
+<#list clients as client>
         <div>
-            <b>{{id}}</b>
-            {{name}}
-            <i>{{description}}</i>
-            <b>{{managerName}}</b>
+            <b>${client.id}</b>
+            <span>${client.name}</span>
+            <i>${client.description}</i>
+            <b>${client.managerName}</b>
         </div>
-    {{/clients}}
-</body>
-</html>
+</#list>
+</@c.page>
