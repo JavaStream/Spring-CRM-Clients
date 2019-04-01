@@ -7,9 +7,10 @@
         <span><a href="/user">User list</a></span>
     </div>
     <div>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <input type="text" name="name" placeholder="Введите название клиента">
             <input type="text" name="description" placeholder="Краткое описание">
+            <input type="file" name="file">
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <button type="submit">Добавить</button>
         </form>
@@ -30,6 +31,11 @@
             <span>${client.name}</span>
             <i>${client.description}</i>
             <b>${client.managerName}</b>
+            <div>
+                <#if client.filename??>
+                    <img src="/img/${client.filename}"
+                </#if>
+            </div>
         </div>
 </#list>
 </@c.page>

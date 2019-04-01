@@ -17,6 +17,8 @@ public class Client {
     @JoinColumn(name = "user_id")         // Поле в базе данных будет называться user_id, а не manager_id
     private User manager;
 
+    private String filename;
+
     public Client() {
     }
 
@@ -60,5 +62,13 @@ public class Client {
 
     public void setManager(User manager) {
         this.manager = manager;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
