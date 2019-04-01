@@ -57,7 +57,7 @@ public class MainController {
             @RequestParam("file") MultipartFile file) throws IOException {
         Client client = new Client(name, description, user);
 
-        if (file != null) {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
             if (!uploadDir.exists()) {

@@ -33,7 +33,7 @@
             <b>${client.managerName}</b>
             <div>
                 <#if client.filename??>
-                    <img src="/img/${client.filename}"
+                    <img src="/images/${client.filename}"
                 </#if>
             </div>
         </div>
