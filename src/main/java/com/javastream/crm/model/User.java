@@ -25,7 +25,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
 
     @Override
     public boolean isAccountNonExpired() {
