@@ -23,7 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()                                                    // Включаем авторизацию для обьекта
-                    .antMatchers("/", "/registration", "/static/**").permitAll()          // Разрешаем доступ без пароля для главной страницы и для Регистрации
+                    .antMatchers("/", "/registration", "/static/**", "/activate/*").permitAll()          // Разрешаем доступ без пароля для главной страницы и для Регистрации
                     .anyRequest().authenticated()                                       // Для всех остальных запросов требуется авторизация
                 .and()
                     .formLogin()                                       // Включаем форму для ввода kогина
@@ -40,6 +40,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());             // шифрует пароли, чтобы они не хранились в явном виде
-
     }
 }
