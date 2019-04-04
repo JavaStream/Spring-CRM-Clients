@@ -2,39 +2,62 @@
 <#import "parts/login.ftl" as l>
 
 <@c.page>
-    <div>
-        <span><a href="/user">User list</a></span>
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <form method="get" action="/main" class="form-inline">
+            <input type="text" name="filter" placeholder="Search by Client">
+            <button type="submit" class="btn btn-primary ml-2">Search</button>
+        </form>
     </div>
-    <div>
+</div>
+
+
+<a class="btn btn-primary" data-toggle="collapse" href="#collapseClient" role="button" aria-expanded="false" aria-controls="collapseClient">
+    Add new Client
+</a>
+
+<div class="collapse" id="collapseClient">
+    <div class="form-group mt-3">
         <form method="post" enctype="multipart/form-data">
-            <input type="text" name="name" placeholder="Введите название клиента">
-            <input type="text" name="description" placeholder="Краткое описание">
-            <input type="file" name="file">
+            <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Введите название клиента">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="description" placeholder="Краткое описание">
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" name="file" id="customFile">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+            </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <button type="submit">Добавить</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </div>
         </form>
     </div>
-
-    <div>
-        <form method="get" action="/main">
-            <input type="text" name="filter">
-            <button type="submit">Найти</button>
-        </form>
-    </div>
+</div>
 
 
-    <div>Список клиентов </div>
-<#list clients as client>
+<div class="card-columns">
+    <#list clients as client>
+    <div class="card my-3">
         <div>
-            <b>${client.id}</b>
-            <span>${client.name}</span>
+            <#if client.filename??>
+                <img src="/images/${client.filename}" class="card-img-top">
+            </#if>
+        </div>
+        <div class="m-2">
             <i>${client.description}</i>
             <b>${client.managerName}</b>
-            <div>
-                <#if client.filename??>
-                    <img src="/images/${client.filename}"
-                </#if>
-            </div>
         </div>
-</#list>
+        <div class="card-footer text-muted">
+        ${client.name}
+        </div>
+    </div>
+    <#else> No Client
+    </#list>
+</div>
 </@c.page>
