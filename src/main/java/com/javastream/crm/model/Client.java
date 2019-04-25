@@ -1,6 +1,9 @@
 package com.javastream.crm.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Client {
@@ -9,8 +12,11 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotBlank(message = "Please fill the Name")
     private String name;
 
+    @NotBlank(message = "Please fill the description")
+    @Length(max = 2048, message = "Descripton too long (more then 2Kb)")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)   // У одного менеджера может быть много клиентов

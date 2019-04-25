@@ -17,14 +17,26 @@
     Add new Client
 </a>
 
-<div class="collapse" id="collapseClient">
+<div class="collapse <#if client??>show</#if>" id="collapseClient">
     <div class="form-group mt-3">
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Введите название клиента">
+                <input type="text" class="form-control ${(nameError??)?string('is-invalid', ' ')}"
+                       value="<#if client??>${client.name}</#if>" name="name" placeholder="Введите название клиента">
+                <#if nameError??>
+                    <div class="invalid-feedback">
+                        ${nameError}
+                    </div>
+                </#if>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="description" placeholder="Краткое описание">
+                <input type="text" class="form-control ${(descriptionError??)?string('is-invalid', ' ')}"
+                       value="<#if client??>${client.description}</#if>" name="description" placeholder="Краткое описание">
+                <#if descriptionError??>
+                    <div class="invalid-feedback">
+                    ${descriptionError}
+                    </div>
+                </#if>
             </div>
             <div class="form-group">
                 <div class="custom-file">
