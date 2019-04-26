@@ -39,7 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()                                       // Включаем форму для ввода kогина
                     .loginPage("/login")                               // url для ввода kогина
-                    .permitAll()                                       // разрешаем этим пользоваться всем
+                    .permitAll()
+                .and()
+                    .rememberMe()
+                // разрешаем этим пользоваться всем
                 .and()
                     .logout()                                           // Включаем логаут
                     .permitAll();                                       // разрешаем этим пользоваться всем

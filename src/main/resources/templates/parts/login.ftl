@@ -35,7 +35,7 @@
                     <label for="inputPassword2"> Password Confirmation: </label>
                 </div>
                 <div class="col-md-6">
-                    <input type="password2" class="form-control ${(password2Error??)?string('is-invalid', ' ')}" name="password2" id="inputPassword2" placeholder="Retype password"/>
+                    <input type="password" class="form-control ${(password2Error??)?string('is-invalid', ' ')}" name="password2" id="inputPassword2" placeholder="Retype password"/>
                     <#if password2Error??>
                         <div class="invalid-feedback">
                         ${password2Error}
@@ -57,6 +57,15 @@
                     </div>
                 </#if>
             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="g-recaptcha" data-sitekey="6LcGVaAUAAAAAFuajVqhl888tuXqYy5mjXBQyshq"></div>
+
+            <#if captchaError??>
+                <div class="alert alert-danger" role="alert">
+                ${captchaError}
+                </div>
+            </#if>
         </div>
         </#if>
 
