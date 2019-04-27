@@ -15,27 +15,36 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NotBlank(message = "Username cannot be empty")
     private String username;
+
     @NotBlank(message = "Password cannot be empty")
     private String password;
-    @Transient
-    @NotBlank(message = "Password Confirmation cannot be empty")
-    private String password2;
 
     private boolean active;
-
-    public String getPassword2() {
-        return password2;
-    }
-
-    public void setPassword2(String password2) {
-        this.password2 = password2;
-    }
 
     @Email(message = "Email is not correct")
     @NotBlank(message = "Email cannot be empty")
     private String email;
+
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Client> clients;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id != null ? id.equals(user.id) : user.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 
     private String activationCode;
 
@@ -132,5 +141,11 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
+    public Set<Client> getClients() {
+        return clients;
+    }
 
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
+    }
 }

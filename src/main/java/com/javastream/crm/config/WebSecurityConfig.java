@@ -34,15 +34,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()                                                    // Включаем авторизацию для обьекта
-                    .antMatchers("/", "/registration", "/static/**", "/activate/*").permitAll()          // Разрешаем доступ без пароля для главной страницы и для Регистрации
+                    .antMatchers("/registration", "/static/**", "/activate/*").permitAll()          // Разрешаем доступ без пароля для главной страницы и для Регистрации
                     .anyRequest().authenticated()                                       // Для всех остальных запросов требуется авторизация
                 .and()
-                    .formLogin()                                       // Включаем форму для ввода kогина
-                    .loginPage("/login")                               // url для ввода kогина
-                    .permitAll()                                       // разрешаем этим пользоваться всем
+                    .formLogin()                                       // Включаем форму для ввода логина
+                    .loginPage("/login")                               // url для ввода логина
+                    .permitAll()
+                .and()
+                    .rememberMe()
                 .and()
                     .logout()                                           // Включаем логаут
-                    .permitAll();                                       // разрешаем этим пользоваться всем
+                    .permitAll();
     }
 
 

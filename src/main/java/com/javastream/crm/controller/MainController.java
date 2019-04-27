@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +20,8 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -68,23 +68,7 @@ public class MainController {
             model.addAttribute("client", client);
         } else {
 
-            if (file != null && !file.getOriginalFilename().isEmpty()) {
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                } else {
-                    System.out.println("Файл найден на диске D!");
-                }
-
-                // Создаем уникальное имя файла
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFilename = uuidFile + "." + file.getOriginalFilename();
-                System.out.println(resultFilename);
-
-                file.transferTo(new File(uploadPath + "/" + resultFilename));
-                client.setFilename(resultFilename);
-            }
+            saveFile(client, file);
 
             model.addAttribute("client", null);
 
@@ -95,6 +79,67 @@ public class MainController {
         model.addAttribute("clients", clients);
 
         return "main";
+    }
+
+    private void saveFile(@Valid Client client, @RequestParam("file") MultipartFile file) throws IOException {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            } else {
+                System.out.println("Файл найден на диске D!");
+            }
+
+            // Создаем уникальное имя файла
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+            System.out.println(resultFilename);
+
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+            client.setFilename(resultFilename);
+        }
+    }
+
+    @GetMapping("/user-clients/{user}")
+    public String userClients(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable User user,
+            Model model,
+            @RequestParam(required = false) Client client
+    ) {
+        Set<Client> clients = user.getClients();
+        model.addAttribute("clients", clients);
+        model.addAttribute("client", client);
+        model.addAttribute("isCurrentUser", currentUser.equals(user));
+
+        return "userClients";
+    }
+
+    @PostMapping("/user-clients/{user}")
+    public String updateClient(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable Long user,
+            @RequestParam("id") Client client,
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        if (client.getManager().equals(currentUser)) {
+            if (!StringUtils.isEmpty(name)) {
+                client.setName(name);
+            }
+
+            if (!StringUtils.isEmpty(description)) {
+                client.setDescription(description);
+            }
+
+            saveFile(client, file);
+
+            clientRepository.save(client);
+
+        }
+        return "redirect:/user-clients/" + user;
     }
 
 
